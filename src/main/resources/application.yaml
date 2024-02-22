@@ -1,0 +1,19 @@
+server:
+  shutdown: graceful
+spring:
+  jackson:
+    time-zone: GMT+8
+    generator:
+      WRITE_NUMBERS_AS_STRINGS: true
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  datasource:
+    url: jdbc:mysql://10.80.146.86:3306/LICENSE_BOX?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
+    username: root
+    password: root
+    hikari:
+      idle-timeout: 500000
+      max-lifetime: 540000
+      connection-timeout: 60000
+      minimum-idle: 5
+      maximum-pool-size: 10

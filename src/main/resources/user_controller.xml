@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<controller  path="/user">
+    <controller path="/list" method="POST">
+        <executor schema="LICENSE_BOX" ref="user.selectPage" params="#bodyJson"/>
+    </controller>
+    <controller path="/info" method="GET">
+        <executor schema="LICENSE_BOX" ref="user.selectOne" params="#param[id]"/>
+    </controller>
+    <controller path="/info" method="PUT">
+        <executor schema="LICENSE_BOX" ref="user.updateById" params="#bodyJson"/>
+    </controller>
+    <controller path="/info" method="DELETE">
+        <executor schema="LICENSE_BOX" ref="user.deleteById" params="#param[id]"/>
+    </controller>
+    <controller path="/info" method="POST">
+        <executor schema="LICENSE_BOX" ref="user.insert" params="#bodyJson"/>
+    </controller>
+</controller>

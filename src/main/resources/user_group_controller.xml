@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<controller  path="/group">
+    <controller path="/list" method="POST">
+        <executor schema="LICENSE_BOX" ref="user_group.selectPage" params="#bodyJson"/>
+    </controller>
+    <controller path="/info" method="GET">
+        <executor schema="LICENSE_BOX" ref="user_group.selectOne" params="#param[id]"/>
+    </controller>
+    <controller path="/info" method="PUT">
+        <executor schema="LICENSE_BOX" ref="user_group.updateById" params="#bodyJson"/>
+    </controller>
+    <controller path="/info" method="DELETE">
+        <executor schema="LICENSE_BOX" ref="user_group.deleteById" params="#param[id]"/>
+    </controller>
+    <controller path="/info" method="POST">
+        <executor schema="LICENSE_BOX" ref="user_group.insert" params="#bodyJson"/>
+    </controller>
+    <controller path="/users" method="GET">
+        <executor type="sql" engine="JavaScript" operator="select">
+            sqlResult = "select `id`, `account`, `name` from `user` u where u.`groups` like CONCAT('%', ?, '%')"
+            sqlParams[0] = $param.groupId
+        </executor>
+    </controller>
+    <controller path="/containers" method="GET">
+        <executor type="sql" engine="JavaScript" operator="select">
+            sqlResult = "select c.id, c.host, c.port, c.name from r_group_container rgc inner join container c on rgc.container_id = c.id where rgc.group_id = ?"
+            sqlParams[0] = $param.groupId
+        </executor>
+    </controller>
+    <controller path="/containers" method="POST" useTransaction="true">
+        <executor type="sql" engine="JavaScript" operator="delete">
+            sqlResult = "DELETE FROM r_group_container WHERE `group_id` = ?"
+            sqlParams[0] = $body.groupId
+        </executor>
+        <executor schema="LICENSE_BOX" ref="r_group_container.batchInsert" params="#bodyJson[data]"/>
+    </controller>
+</controller>

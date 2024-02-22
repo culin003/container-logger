@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<TableExecutors>
+    <table schema="LICENSE_BOX" name="container_collect" keyGenerator="SNOWFLAKE"/>
+    <table schema="LICENSE_BOX" name="r_group_container" keyGenerator="SNOWFLAKE"/>
+    <table schema="LICENSE_BOX" name="container" keyGenerator="SNOWFLAKE"/>
+    <table schema="LICENSE_BOX" name="user_group" keyGenerator="SNOWFLAKE"/>
+    <table schema="LICENSE_BOX" name="user" keyGenerator="SNOWFLAKE"/>
+</TableExecutors>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<controller path="/session">
+    <controller path="/info" method="GET">
+        <executor type="bean" ref="sessionBean.getLoginUser" params="#header[token]"/>
+    </controller>
+    <controller path="/info" method="POST">
+        <executor type="bean" ref="sessionBean.login" params="#bodyJson"/>
+    </controller>
+    <controller path="/info" method="DELETE">
+        <executor type="bean" ref="sessionBean.logout" params="#header[token]"/>
+    </controller>
+</controller>
