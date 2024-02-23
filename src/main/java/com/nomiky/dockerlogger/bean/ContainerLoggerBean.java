@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -87,8 +88,10 @@ public class ContainerLoggerBean implements InitializingBean {
                     try (BufferedReader tempReader = new BufferedReader(new InputStreamReader(finalChannel.getErrStream()))) {
                         String line;
                         while ((line = tempReader.readLine()) != null) {
-                            disruptorService.sendMessage(id, line + "\r\n");
+                            disruptorService.sendMessage(id, line);
                         }
+                    }catch (InterruptedIOException ioe) {
+                        log.error("客户端连接关闭！");
                     } catch (Exception e) {
                         log.error("获取日志流发生异常！", e);
                     }
@@ -99,7 +102,7 @@ public class ContainerLoggerBean implements InitializingBean {
                 reader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    disruptorService.sendMessage(id, line + "\r\n");
+                    disruptorService.sendMessage(id, line);
                 }
             } catch (Exception e) {
                 log.error("获取日志流发生异常！", e);

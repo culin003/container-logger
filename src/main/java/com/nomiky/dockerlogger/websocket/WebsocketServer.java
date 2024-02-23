@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- *
  * @author nomiky
  * @since 2024年02月02日 17时19分
  */
@@ -46,7 +45,8 @@ public class WebsocketServer {
         WebsocketServer.loggerBean = loggerBean;
     }
 
-    public WebsocketServer(){}
+    public WebsocketServer() {
+    }
 
     /**
      * 连接建立成功调用的方法。由前端<code>new WebSocket</code>触发
@@ -63,10 +63,10 @@ public class WebsocketServer {
         log.info("连接建立成功，当前在线数为：{} ==> 开始监听新连接：session_id = {}， sid = {},。", sessionManager.getOnlineCount(), session.getId(), sid);
         // 发起ssh请求，异步发送消息
         try {
-            boolean created = loggerBean.createContainerLoggerStream("","", sid);
-            if (created){
-                sessionManager.sendToOne(sid, "开始接收日志信息...\r\n");
-            }else{
+            boolean created = loggerBean.createContainerLoggerStream("", "", sid);
+            if (created) {
+                sessionManager.sendToOne(sid, "开始接收日志信息...");
+            } else {
                 sessionManager.sendToOne(sid, "日志信息流获取失败！");
                 session.close(new CloseReason(CloseReason.CloseCodes.UNEXPECTED_CONDITION, ""));
             }
@@ -102,14 +102,9 @@ public class WebsocketServer {
     @OnMessage
     public void onMessage(@PathParam("sid") String sid, String message) {
         JSONObject jsonObject = JSONUtil.parseObj(message);
-        String toSid = jsonObject.getStr("sid");
-        String msg = jsonObject.getStr("message");
-        log.info("服务端收到客户端消息 ==> fromSid = {}, toSid = {}, message = {}", sid, toSid, message);
-
-        if (StrUtil.isEmpty(toSid)) {
-            sessionManager.sendToAll(sid, msg);
-        } else {
-            sessionManager.sendToOne(toSid, msg);
+        String type = jsonObject.getStr("type");
+        if ("PING".equalsIgnoreCase(type)) {
+            sessionManager.sendToOne(sid, "{\"type\": \"PONG\"}");
         }
     }
 
